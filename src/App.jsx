@@ -234,7 +234,7 @@ function AppContent() {
                 <Github size={20} />
               </a>
             </div>
-            <p className="text-xs text-white/20 font-medium">Developed with Passion by <span className="text-white/40">Senior Engineer</span></p>
+            <p className="text-xs text-white/20 font-medium">Developed with Passion by <span className="text-white/40">Khushi Jai</span></p>
           </div>
         </div>
         <div className="mt-16 pt-8 border-t border-white/[0.02] text-center">
