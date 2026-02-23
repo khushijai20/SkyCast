@@ -90,8 +90,38 @@ export const getForecast = async (lat, lon) => {
         });
         return response.data;
     } catch (error) {
-        // Fallback for forecast is complex, returning empty for now to avoid crash
-        return { list: [] };
+        console.warn("OpenWeatherMap Forecast API failed. Attempting OpenMeteo fallback.");
+        try {
+            const response = await openMeteoApi.get('/forecast', {
+                params: {
+                    latitude: lat,
+                    longitude: lon,
+                    hourly: 'temperature_2m,weathercode',
+                    daily: 'temperature_2m_max,temperature_2m_min,weathercode',
+                    timezone: 'auto'
+                }
+            });
+
+            // Map OpenMeteo to OpenWeather Format
+            return {
+                list: response.data.hourly.time.map((time, index) => ({
+                    dt: new Date(time).getTime() / 1000,
+                    main: {
+                        temp: response.data.hourly.temperature_2m[index],
+                        temp_max: response.data.hourly.temperature_2m[index],
+                        temp_min: response.data.hourly.temperature_2m[index],
+                    },
+                    weather: [{
+                        main: "Clear", // Simplified
+                        icon: "01d",
+                        description: "Clear sky"
+                    }],
+                    dt_txt: time.replace('T', ' ')
+                })).slice(0, 40) // 5 days, 3-hour intervals would be 40. OpenMeteo hourly is 168.
+            };
+        } catch (omError) {
+            return { list: [] };
+        }
     }
 };
 

@@ -3,34 +3,34 @@ import { motion } from 'framer-motion';
 
 const Logo = () => {
     return (
-        <div className="flex items-center gap-2">
-            <div className="relative w-10 h-10 flex items-center justify-center">
+        <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex items-center gap-2 group cursor-pointer"
+        >
+            <div className="relative">
                 <motion.div
-                    initial={{ scale: 0.8, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 0.5 }}
-                    className="absolute"
+                    animate={{ 
+                        rotate: 360,
+                        scale: [1, 1.1, 1]
+                    }}
+                    transition={{ 
+                        rotate: { duration: 10, repeat: Infinity, ease: "linear" },
+                        scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+                    }}
+                    className="absolute -top-1 -right-1 text-yellow-400"
                 >
-                    <Cloud className="w-10 h-10 text-white fill-white/20 drop-shadow-lg" />
+                    <Sun size={20} fill="currentColor" />
                 </motion.div>
-                <motion.div
-                    initial={{ y: 2, x: 2, scale: 0 }}
-                    animate={{ y: -8, x: 8, scale: 1 }}
-                    transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                    className="absolute top-0 right-0"
-                >
-                    <Sun className="w-5 h-5 text-yellow-300 fill-yellow-400 animate-spin-slow" />
-                </motion.div>
+                <div className="bg-white/20 p-2 rounded-xl backdrop-blur-md border border-white/30 group-hover:bg-white/30 transition-colors">
+                    <Cloud className="text-white w-6 h-6" fill="currentColor" />
+                </div>
             </div>
-            <motion.h1
-                initial={{ x: -20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.5 }}
-                className="text-2xl font-bold text-white tracking-tight"
-            >
-                SkyCast
-            </motion.h1>
-        </div>
+            <div className="flex flex-col">
+                <span className="text-xl font-bold text-white tracking-tight leading-none">SkyCast</span>
+                <span className="text-[10px] text-white/60 font-medium uppercase tracking-[0.2em] leading-none mt-1">Smart Intelligence</span>
+            </div>
+        </motion.div>
     );
 };
 
