@@ -1,38 +1,52 @@
 import { motion } from 'framer-motion';
 
+const SkeletonItem = ({ className }) => (
+    <div className={`bg-white/5 rounded-3xl animate-pulse relative overflow-hidden ${className}`}>
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"></div>
+    </div>
+);
+
 const SkeletonLoader = () => {
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full max-w-6xl mx-auto p-4 md:p-8">
-            <div className="lg:col-span-2 space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <div className="lg:col-span-3 space-y-8">
                 {/* Main Card Skeleton */}
-                <div className="h-64 md:h-80 rounded-3xl bg-white/5 backdrop-blur-md border border-white/10 animate-pulse flex flex-col p-8 justify-between">
-                    <div className="flex justify-between items-start">
-                        <div className="space-y-4">
-                            <div className="h-10 w-48 bg-white/10 rounded-lg"></div>
-                            <div className="h-4 w-32 bg-white/5 rounded-lg"></div>
+                <div className="glass-panel rounded-[3rem] p-10 h-[400px] flex flex-col justify-between">
+                    <div className="flex justify-between items-center">
+                        <div className="flex gap-4">
+                            <SkeletonItem className="w-12 h-12 rounded-2xl" />
+                            <div className="space-y-2">
+                                <SkeletonItem className="w-48 h-8" />
+                                <SkeletonItem className="w-32 h-4" />
+                            </div>
                         </div>
-                        <div className="h-12 w-12 bg-white/10 rounded-full"></div>
+                        <SkeletonItem className="w-12 h-12 rounded-2xl" />
                     </div>
-                    <div className="flex items-end justify-between">
-                        <div className="h-24 w-40 bg-white/10 rounded-2xl"></div>
-                        <div className="h-32 w-32 bg-white/10 rounded-full"></div>
+                    <div className="flex items-center gap-12">
+                        <SkeletonItem className="w-48 h-48 rounded-full" />
+                        <div className="space-y-4">
+                            <SkeletonItem className="w-40 h-24" />
+                            <SkeletonItem className="w-32 h-4" />
+                        </div>
                     </div>
                 </div>
 
-                {/* Highlights Grid Skeleton */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {[1, 2, 3, 4].map((i) => (
-                        <div key={i} className="h-32 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 animate-pulse"></div>
+                {/* Grid Highlights Skeleton */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {[1, 2, 3, 4, 5, 6].map(i => (
+                        <SkeletonItem key={i} className="h-40 rounded-[2rem]" />
                     ))}
                 </div>
             </div>
 
-            {/* Sidebar Skeleton */}
-            <div className="lg:col-span-1 space-y-4">
-                <div className="h-10 w-full bg-white/10 rounded-xl mb-6"></div>
-                {[1, 2, 3, 4, 5, 6].map((i) => (
-                    <div key={i} className="h-20 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 animate-pulse"></div>
-                ))}
+            {/* Right Side Forecast Skeleton */}
+            <div className="lg:col-span-1">
+                <div className="glass-panel rounded-[2.5rem] p-7 h-full space-y-6">
+                    <SkeletonItem className="w-full h-8" />
+                    {[1, 2, 3, 4, 5, 6].map(i => (
+                        <SkeletonItem key={i} className="w-full h-16 rounded-2xl" />
+                    ))}
+                </div>
             </div>
         </div>
     );

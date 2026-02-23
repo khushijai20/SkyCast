@@ -3,62 +3,49 @@ export const getAISuggestions = (weather) => {
 
     const { main, wind, weather: weatherDetails } = weather;
     const temp = main.temp;
-    const condition = weatherDetails[0].main.toLowerCase(); // Rain, Clear, Clouds, Snow, Drizzle, Thunderstorm
+    const condition = weatherDetails[0].main.toLowerCase();
     const windSpeed = wind.speed;
-    const humidity = main.humidity;
 
-    const suggestions = {
-        clothing: [],
-        activities: [],
-        travel: "",
-        mood: ""
-    };
+    let gear = "";
+    if (temp < 10) gear = "Heavy winter coat, thermal wear, and gloves are highly recommended.";
+    else if (temp < 20) gear = "A light jacket or hoodie with jeans would be perfect for this weather.";
+    else if (temp < 30) gear = "Shorts and breathable cotton t-shirts will keep you comfortable.";
+    else gear = "Extremely hot! Wear loose light-colored clothing, a hat, and plenty of sunscreen.";
 
-    // Clothing Logic
-    if (temp < 5) {
-        suggestions.clothing.push("Heavy winter coat", "Gloves", "Scarf", "Thermal wear");
-    } else if (temp < 15) {
-        suggestions.clothing.push("Jacket or Hoodie", "Jeans", "Layered clothing");
-    } else if (temp < 25) {
-        suggestions.clothing.push("T-shirt", "Light trousers", "Comfortable shoes");
-    } else {
-        suggestions.clothing.push("Shorts", "Tank top", "Breathable fabrics", "Sunglasses", "Hat");
-    }
+    if (condition.includes("rain") || condition.includes("drizzle")) gear += " Don't forget an umbrella!";
 
-    if (condition.includes("rain") || condition.includes("drizzle") || condition.includes("thunderstorm")) {
-        suggestions.clothing.push("Umbrella", "Raincoat", "Waterproof shoes");
-    } else if (condition.includes("snow")) {
-        suggestions.clothing.push("Snow boots", "Waterproof gear");
-    }
+    let activity = "";
+    if (condition.includes("rain") || condition.includes("storm")) activity = "Perfect time for indoor activities like reading, gaming, or a cozy movie marathon.";
+    else if (condition.includes("clear") && temp > 15 && temp < 32) activity = "Ideal for outdoor sports, a park picnic, or a refreshing evening walk.";
+    else if (temp > 32) activity = "Stay cool! A trip to the swimming pool or a visit to an indoor mall is recommended.";
+    else activity = "A good day for a light jog or a visit to your favorite local coffee shop.";
 
-    // Activities Logic
-    if (condition.includes("rain") || condition.includes("snow") || condition.includes("thunderstorm")) {
-        suggestions.activities.push("Read a book", "Watch movies", "Indoor gaming", "Cook a new recipe", "Visit a museum");
-        suggestions.mood = "Cozy & Relaxed";
-    } else if (condition.includes("clear") && temp > 15 && temp < 30) {
-        suggestions.activities.push("Hiking", "Picnic", "Cycling", "Outdoor photography", "Gardening");
-        suggestions.mood = "Energetic & Happy";
-    } else if (condition.includes("clouds")) {
-        suggestions.activities.push("Walking", "Light jogging", "Photography", "Coffee shop visit");
-        suggestions.mood = "Calm & Reflective";
-    } else if (temp > 30) {
-        suggestions.activities.push("Swimming", "Beach visit", "Stay hydrated", "Indoor mall shopping");
-        suggestions.mood = "Chill & Cool";
-    } else {
-        suggestions.activities.push("Yoga", "Meditation", "Review your goals");
-        suggestions.mood = "Balanced";
-    }
+    let travel = "";
+    if (condition.includes("storm") || windSpeed > 15) travel = "High alerts! Avoid long drives due to potential visibility issues and strong winds.";
+    else if (condition.includes("rain") || condition.includes("mist")) travel = "Roads might be slippery. Drive cautiously and maintain a safe following distance.";
+    else travel = "skies look favorable! Perfect conditions for a road trip or visiting nearby attractions.";
 
-    // Travel Logic
-    if (condition.includes("thunderstorm") || condition.includes("snow") || windSpeed > 20) {
-        suggestions.travel = "⚠️ Poor driving conditions. Stay home if possible.";
-    } else if (condition.includes("rain") || condition.includes("mist") || condition.includes("fog")) {
-        suggestions.travel = "🚗 Drive carefully. Wet/slippery roads or low visibility.";
-    } else if (temp > 35) {
-        suggestions.travel = "🚗 Check tire pressure and engine coolant before long drives.";
-    } else {
-        suggestions.travel = "✅ Excellent conditions for travel.";
-    }
+    let lifestyle = "";
+    if (main.humidity > 80) lifestyle = "High humidity might feel sticky. Keep your skin hydrated and stay in well-ventilated areas.";
+    else if (temp < 5) lifestyle = "Cold weather! A warm cup of hot chocolate or soup will help maintain your body heat.";
+    else lifestyle = "The weather seems balanced. A great time to catch up on garden work or balcony relaxation.";
 
-    return suggestions;
+    return [
+        {
+            title: "What to Wear",
+            description: gear
+        },
+        {
+            title: "Recommended Activity",
+            description: activity
+        },
+        {
+            title: "Travel Conditions",
+            description: travel
+        },
+        {
+            title: "Lifestyle Tip",
+            description: lifestyle
+        }
+    ];
 };

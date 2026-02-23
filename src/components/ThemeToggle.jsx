@@ -1,30 +1,32 @@
-import { useTheme } from '../contexts/ThemeContext';
+import { motion } from 'framer-motion';
 import { Sun, Moon } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '../contexts/ThemeContext';
 
 const ThemeToggle = () => {
     const { isDarkMode, toggleTheme } = useTheme();
 
     return (
-        <motion.button
-            whileTap={{ scale: 0.9 }}
-            whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.15)" }}
+        <button
             onClick={toggleTheme}
-            className="p-2.5 rounded-xl bg-white/10 backdrop-blur-xl border border-white/20 text-white transition-all shadow-lg"
-            aria-label="Toggle Theme"
+            className="relative w-14 h-8 rounded-full bg-white/5 border border-white/10 p-1 flex items-center cursor-pointer transition-colors hover:bg-white/10"
         >
-            <AnimatePresence mode="wait" initial={false}>
-                <motion.div
-                    key={isDarkMode ? "dark" : "light"}
-                    initial={{ y: 10, opacity: 0, rotate: -45 }}
-                    animate={{ y: 0, opacity: 1, rotate: 0 }}
-                    exit={{ y: -10, opacity: 0, rotate: 45 }}
-                    transition={{ duration: 0.2 }}
-                >
-                    {isDarkMode ? <Moon size={20} className="text-indigo-400 fill-indigo-400" /> : <Sun size={20} className="text-yellow-400 fill-yellow-400" />}
-                </motion.div>
-            </AnimatePresence>
-        </motion.button>
+            <motion.div
+                animate={{ x: isDarkMode ? 24 : 0 }}
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                className="w-6 h-6 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 shadow-lg flex items-center justify-center relative z-10"
+            >
+                {isDarkMode ? (
+                    <Moon size={12} className="text-white" />
+                ) : (
+                    <Sun size={12} className="text-white" />
+                )}
+            </motion.div>
+
+            <div className="absolute inset-0 flex justify-around items-center px-1">
+                <Sun size={12} className={`transition-opacity duration-300 ${isDarkMode ? 'opacity-30' : 'opacity-0'}`} />
+                <Moon size={12} className={`transition-opacity duration-300 ${isDarkMode ? 'opacity-0' : 'opacity-30'}`} />
+            </div>
+        </button>
     );
 };
 
